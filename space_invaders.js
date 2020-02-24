@@ -7,9 +7,9 @@ setInterval(updateGame, 500)
 
 function startGame() {
 // create new game piece
-    let invader = new invaderBlock(60, 30, 20, 20)
-
+    invader = new invaderBlock(60, 30, 20, 20)
 }
+
 // used to create new invader
 function invaderBlock(width, height, x, y) {
     this.width = width;
@@ -22,17 +22,13 @@ function invaderBlock(width, height, x, y) {
     }
 }
 
-    function updateGame() {
-        if (invader.y < 420) {
-            clearCanvas();
-            invader.y += 10;
-            invader.update()
-        }
-    }
+function updateGame() {
+        clearCanvas();
+        invader.y += 10;
+        invader.update()
 
-    function clearCanvas() {
-        context.clearRect(0, 0, canvas.width, canvas.height)
-    }
+}
 
-
-
+function clearCanvas() {
+    context.clearRect(0, 0, canvas.width, canvas.height)
+}
