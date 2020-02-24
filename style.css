@@ -1,0 +1,14 @@
+#canvas {
+    border: solid black 5px;
+    position:absolute; left: 50%; width: 400px; margin-left: -200px;
+    background-color: gainsboro;
+}
+
+#title_card {
+    text-align: center;
+    color: gainsboro;
+}
+
+body {
+    background-color: darkblue;
+}
