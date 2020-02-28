@@ -1,13 +1,33 @@
 let canvas = document.getElementById('canvas')
 let context = canvas.getContext('2d')
 let invader;
-let invaders =[]
+let invaders =[];
+console.log(invaders)
+let default_x = 20;
+let default_y = 20
+let resources = [
+    {name: 'cat', type:'image', src:'cat.jpg'},
 setInterval(updateGame, 500)
+
+]
 
 
 function startGame() {
-// create new game piece
-    invader = new invaderBlock(60, 30, 20, 20)
+// create new game pieces and push to the invaders list
+    for (let i = 0; i < 4; i++) {
+        default_y = 20
+        invader = new invaderBlock(60, 30, default_x, default_y)
+        invaders.push(invader)
+        default_x += 90
+
+        for (let i = 0; i < 4; i++) {
+            invader = new invaderBlock(60, 30, default_x, default_y)
+            invaders.push(invader)
+            default_y += 50
+        }
+    }
+    // remove first invader for even numbered blocks
+    invaders.shift()
 }
 
 // used to create new invader
@@ -23,10 +43,12 @@ function invaderBlock(width, height, x, y) {
 }
 
 function updateGame() {
-        clearCanvas();
-        invader.y += 10;
-        invader.update()
-
+    // at each interval clear the canvas and add to invader.y; update through invaderBlock method on line 19
+    clearCanvas();
+        invaders.forEach(function (element) {
+            element.x -= 3;
+            element.update()
+        })
 }
 
 function clearCanvas() {
