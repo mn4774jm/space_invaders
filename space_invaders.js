@@ -9,6 +9,7 @@ let direction = -20;
 let result;
 let shipx = 225;
 let shipy = 660;
+let bullets = [];
 
 
 setInterval(updateGame, 500);
@@ -73,7 +74,9 @@ function updateGame() {
             invaders.forEach(function (element){
                 element.y += 5
             })
-        }draw_player()
+        }
+        draw_player();
+        draw_bullets();
         invaders.forEach(function (element) {
                 element.x += direction;
                 element.update()
@@ -90,6 +93,9 @@ function move_ship(e){
         case 39: //move right
             shipx += 5;
             break;
+        case 32: //spacebar
+            fire_bullet();
+            break;
     }
     updateGame()
 
@@ -105,6 +111,29 @@ function check_border() {
         }
         return result
     }
+}
+
+function fire_bullet(){
+    let bullet = new create_bullet(10, 30, shipx, shipy)
+    bullets.push(bullet)
+    draw_bullets()
+}
+
+function create_bullet(width, height, x, y){
+    this.width = width;
+    this.height = height;
+    this.x = x+30;
+    this.y = y;
+    this.update = function() {
+        context.fillStyle = 'blue';
+        context.fillRect(this.x, this.y, this.width, this.height)
+    }
+}
+function draw_bullets(){
+    bullets.forEach(function(element){
+        element.y -= 5;
+        element.update()
+    })
 }
 
 function clearCanvas() {
