@@ -1,24 +1,22 @@
+//create canvas
 let canvas = document.getElementById('canvas');
 let context = canvas.getContext('2d');
-let invader;
+//set-up default arrays and default starting positions
 let invaders =[];
-// console.log(invaders);
 let default_x = 20;
 let default_y = 20;
 let direction = -20;
-let result;
 let shipx = 225;
 let shipy = 660;
 let bullets = [];
-
-
+// set interval to move blocks every half second
 setInterval(updateGame, 500);
 
 function startGame() {
-// create new game pieces and push to the invaders list
+// create new enemy objects and push to the invaders list
     for (let i = 0; i < 4; i++) {
         default_y = 20;
-        invader = new create_entity(60, 30, default_x, default_y, 'black');
+        let invader = new create_entity(60, 30, default_x, default_y, 'black');
         invaders.push(invader);
         default_x += 90;
 
@@ -45,6 +43,7 @@ function create_entity(width, height, x, y, color) {
     }
 }
 
+//draw player block at starting location
 function draw_player(){
     clearCanvas();
     context.fillStyle = 'blue';
@@ -52,7 +51,7 @@ function draw_player(){
 
 }
 
-
+//called every half second to run game. Calls for the player to be redrawn as well as bullets
 function updateGame() {
     // at each interval clear the canvas and add to invader.y; update through create_entity method on line 19
     clearCanvas();
@@ -71,7 +70,7 @@ function updateGame() {
         });
 
 }
-
+//event listeners for left right and spacebar keys
 window.addEventListener('keydown', move_ship, false );
 function move_ship(e){
     switch(e.keyCode) {
@@ -83,29 +82,29 @@ function move_ship(e){
             break;
         case 32: //spacebar
             fire_bullet();
-
             break;
     }
-    updateGame()
-
+    // updateGame() - this will increase the speed of the game so the blocks move twice as fast when the player issues a command
+    // could be a fun feature to impliment at a later date
 }
 
 //TODO ask why this function doesn't work with forEach and how the simplification works...Also why for 'doesn't loop'
 function check_border() {
     for (let i = 0; i < invaders.length; i++) {
-        if (invaders[i].x <= 0 || invaders[i].x >= 155) {
-            result = true;
-        }else{
-            result = false
-        }
-        return result
+        return invaders[i].x <= 0 || invaders[i].x >= 155;
     }
 }
 
+//called when spacebar pressed. create cooldown variable and recharge time.
+//if not on cooldown calls to draw bullet and starts recharge timer method
+let cooldown = false;
+let RECHARGE_TIME = 2000;
 function fire_bullet(){
-    let bullet = new create_entity(10, 30, shipx, shipy, 'red')
-    bullets.push(bullet)
-    draw_bullets()
+    if (!cooldown){
+    let bullet = new create_entity(10, 30, shipx+25, shipy-30, 'red');
+    bullets.push(bullet);
+    draw_bullets();
+    startCoolDown()}
 }
 
 function draw_bullets(){
@@ -113,6 +112,12 @@ function draw_bullets(){
         element.y -= 5;
         element.update()
     })
+}
+
+//function for cooldown timer
+function startCoolDown(){
+    cooldown = true;
+    setTimeout(function(){ cooldown = false}, RECHARGE_TIME)
 }
 
 function clearCanvas() {
