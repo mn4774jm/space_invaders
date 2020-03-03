@@ -18,12 +18,12 @@ function startGame() {
 // create new game pieces and push to the invaders list
     for (let i = 0; i < 4; i++) {
         default_y = 20;
-        invader = new invaderBlock(60, 30, default_x, default_y);
+        invader = new create_entity(60, 30, default_x, default_y, 'black');
         invaders.push(invader);
         default_x += 90;
 
         for (let i = 0; i < 4; i++) {
-            invader = new invaderBlock(60, 30, default_x, default_y);
+            invader = new create_entity(60, 30, default_x, default_y, 'black');
             invaders.push(invader);
             default_y += 50
         }
@@ -34,39 +34,27 @@ function startGame() {
 
 
 // used to create new invader
-function invaderBlock(width, height, x, y) {
+function create_entity(width, height, x, y, color) {
     this.width = width;
     this.height = height;
     this.x = x;
     this.y = y;
     this.update = function() {
-        context.fillStyle = 'black';
+        context.fillStyle = color;
         context.fillRect(this.x, this.y, this.width, this.height);
     }
 }
 
-//     player = new Player(60, 30, shipx, shipy);
-// function Player(width, height, x, y){
-//     this.width = width;
-//     this.height = height;
-//     this.x = x;
-//     this.y = y;
-//     this.update = function() {
-//         context.fillStyle = 'red';
-//         context.fillRect(this.x, this.y, this.width, this.height)
-//     }
-// }
-
 function draw_player(){
     clearCanvas();
-    context.fillStyle = 'red';
+    context.fillStyle = 'blue';
     context.fillRect(shipx, shipy, 60, 30)
 
 }
 
 
 function updateGame() {
-    // at each interval clear the canvas and add to invader.y; update through invaderBlock method on line 19
+    // at each interval clear the canvas and add to invader.y; update through create_entity method on line 19
     clearCanvas();
         let check = check_border();
         if( check === true){
@@ -95,6 +83,7 @@ function move_ship(e){
             break;
         case 32: //spacebar
             fire_bullet();
+
             break;
     }
     updateGame()
@@ -114,21 +103,11 @@ function check_border() {
 }
 
 function fire_bullet(){
-    let bullet = new create_bullet(10, 30, shipx, shipy)
+    let bullet = new create_entity(10, 30, shipx, shipy, 'red')
     bullets.push(bullet)
     draw_bullets()
 }
 
-function create_bullet(width, height, x, y){
-    this.width = width;
-    this.height = height;
-    this.x = x+30;
-    this.y = y;
-    this.update = function() {
-        context.fillStyle = 'blue';
-        context.fillRect(this.x, this.y, this.width, this.height)
-    }
-}
 function draw_bullets(){
     bullets.forEach(function(element){
         element.y -= 5;
