@@ -9,23 +9,27 @@ let direction = -20;
 let shipx = 225;
 let shipy = 660;
 let bullets = [];
+let enemy_bullets = [];
 // set interval to move blocks every half second
 setInterval(updateGame, 500);
 
 function startGame() {
+    let themeSong = new Audio('02_Rounds%201,%209.mp3')
+        themeSong.play()
 // create new enemy objects and push to the invaders list
     for (let i = 0; i < 4; i++) {
         default_y = 20;
         let invader = new create_entity(60, 30, default_x, default_y, 'black');
         invaders.push(invader);
-        default_x += 90;
 
         for (let i = 0; i < 4; i++) {
             invader = new create_entity(60, 30, default_x, default_y, 'black');
             invaders.push(invader);
             default_y += 50
         }
+        default_x += 90;
     }
+    console.log(invaders)
     // remove first invader for even numbered blocks
     invaders.shift()
 }
@@ -55,6 +59,7 @@ function draw_player(){
 function updateGame() {
     // at each interval clear the canvas and add to invader.y; update through create_entity method on line 19
     clearCanvas();
+    check_collision()
         let check = check_border();
         if( check === true){
             direction *= -1;
@@ -84,8 +89,9 @@ function move_ship(e){
             fire_bullet();
             break;
     }
-    // updateGame() - this will increase the speed of the game so the blocks move twice as fast when the player issues a command
-    // could be a fun feature to impliment at a later date
+    updateGame()
+    // - this will increase the speed of the game so the blocks move twice as fast when the player issues a command
+    // could be a fun feature to implement at a later date
 }
 
 //TODO ask why this function doesn't work with forEach and how the simplification works...Also why for 'doesn't loop'
@@ -104,7 +110,14 @@ function fire_bullet(){
     let bullet = new create_entity(10, 30, shipx+25, shipy-30, 'red');
     bullets.push(bullet);
     draw_bullets();
+    draw_enemy_bullets()
+    let shoot = new Audio('shoot.wav')
+        shoot.play()
     startCoolDown()}
+}
+
+function enemy_fire(){
+    let start_fire = invaders[Math.floor(Math.random()*invaders.length)]
 }
 
 function draw_bullets(){
@@ -113,11 +126,34 @@ function draw_bullets(){
         element.update()
     })
 }
+function draw_enemy_bullets(){
+    enemy_bullets.forEach(function(element){
+        element.y += 5;
+        element.update()
+    })
+}
 
-//function for cooldown timer
+//function for cooldown timer. Timer must finish before another bullet can be fired by the player
 function startCoolDown(){
     cooldown = true;
     setTimeout(function(){ cooldown = false}, RECHARGE_TIME)
+}
+
+function check_collision(){
+    // loop through all bullets and invaders to check for collision; if triggered, the invader and bullet are spliced out
+    for(let b = 0; b < bullets.length; b++){
+        for(let i= 0; i <invaders.length;i++) {
+            if(invaders[i].x >= bullets[b].x && invaders[i].x <= bullets[b].x+60 &&
+                invaders[i].y >= bullets[b].y-30 && invaders[i].y <= bullets[b].y){
+                invaders.splice(i,1);
+                bullets.splice(b,1);
+                let explode = new Audio('invaderkilled.wav')
+                explode.play()
+
+            }
+        }
+    }
+
 }
 
 function clearCanvas() {
