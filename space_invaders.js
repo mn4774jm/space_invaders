@@ -17,26 +17,19 @@ setInterval(updateGame, game_speed);
 setInterval(enemy_fire, enemy_fire_speed)
 
 function startGame() {
-    let themeSong = new Audio('02_Rounds%201,%209.mp3'); // thme song not playing for some reason
-        themeSong.play();
-// create new enemy objects and push to the invaders list
-    for (let i = 0; i < 4; i++) {
-        default_y = 20;
-        let invader = new create_entity(60, 30, default_x, default_y, 'black');
-        invaders.push(invader);
+    let music = new Audio('themeSong.mp3');
+    music.play()
 
-        for (let i = 0; i < 5; i++) {
-            invader = new create_entity(60, 30, default_x, default_y, 'black');
+    while (invaders.length <= 20) {
+        default_x = 20;
+        for (let i =0; i< 4; i++){
+            let invader = new create_entity(60, 30, default_x, default_y, 'black');
             invaders.push(invader);
-            default_y += 50
+            default_x += 90
         }
-        default_x += 90;
+        default_y += 50
     }
-    console.log(invaders)
-    // remove first invader for even numbered blocks
-    invaders.shift()
 }
-
 
 // used to create new invader
 function create_entity(width, height, x, y, color) {
@@ -120,15 +113,27 @@ function fire_bullet(){
 }
 
 
-let enemy_cooldown = false;
 function enemy_fire(){
-    if(!enemy_cooldown){
-        let start_fire = invaders[Math.floor(Math.random()*invaders.length)]
-        let bullet = new create_entity(10, 30, start_fire.x+25, start_fire.y-30, 'green');
+    // create array to hold bottom blocks and min value to compare against
+    let can_fire = [];
+    let min_y = 0;
+    invaders.forEach(function(element){
+        if(element.y > min_y){
+            min_y = element.y
+        }
+    });
+    // if element y value is equal to min y, store to array
+    invaders.forEach(function(element){
+        if(element.y === min_y){
+            can_fire.push(element)
+        }
+    });
+    //choose random bottom y to launch bullet from
+        let start_fire = can_fire[Math.floor(Math.random()*can_fire.length)]
+        let bullet = new create_entity(10, 30, start_fire.x+25, start_fire.y+30, 'green');
         enemy_bullets.push(bullet);
         draw_enemy_bullets()
 
-    }
 }
 
 
@@ -163,10 +168,9 @@ function check_collision(){
                 invaders[i].y >= bullets[b].y-30 && invaders[i].y <= bullets[b].y){
                 invaders.splice(i,1);
                 bullets.splice(b,1);
-                let explode = new Audio('invaderkilled.wav')
+                let explode = new Audio('invaderkilled.wav');
                 explode.play();
                 game_speed += 1000;
-
             }
         }
     }
