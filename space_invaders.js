@@ -1,4 +1,7 @@
 //create canvas
+let start_can = document.getElementById('start_canvas');
+let start_ctx = start_can.getContext('2d');
+
 let canvas = document.getElementById('canvas');
 let context = canvas.getContext('2d');
 //set-up default arrays and default starting positions
@@ -16,6 +19,18 @@ let enemy_fire_speed = 6000;
 setInterval(updateGame, game_speed);
 setInterval(enemy_fire, enemy_fire_speed)
 
+function ready_to_start(){
+
+// maybe try creating a new canvas that fills most of the screen instructing the user to click to start, use a mouse listener to launch game and start music
+
+    start_ctx.fillStyle = "white";
+    start_ctx.font = 'bold 16px Arial';
+    start_ctx.textAlign = 'center';
+    start_ctx.textBaseline = "middle"
+    start_ctx.fillText("SPACE INVADERS\nclick to start", (canvas.width / 2), -17, (canvas.height / 2) +8)
+
+}
+let music = new Audio('themeSong.mp3');
 function startGame() {
     let music = new Audio('themeSong.mp3');
     music.play()
@@ -55,7 +70,7 @@ function draw_player(){
 function updateGame() {
     // at each interval clear the canvas and add to invader.y; update through create_entity method on line 19
     clearCanvas();
-    check_collision()
+    enemy_check_collision()
         let check = check_border();
         if( check === true){
             direction *= -1;
@@ -73,8 +88,15 @@ function updateGame() {
 
 }
 //event listeners for left right and spacebar keys
+let counter = 0;
 window.addEventListener('keydown', move_ship, false );
 function move_ship(e){
+    clear_start()
+    if(counter < 1){
+        music.play();
+        startGame();
+        counter += 1
+    }
     switch(e.keyCode) {
         case 37: //move left
             shipx -= 5;
@@ -91,7 +113,7 @@ function move_ship(e){
     // could be a fun feature to implement at a later date
 }
 
-//TODO ask why this function doesn't work with forEach and how the simplification works...Also why for 'doesn't loop'
+
 function check_border() {
     for (let i = 0; i < invaders.length; i++) {
         return invaders[i].x <= 0 || invaders[i].x >= 155;
@@ -133,6 +155,8 @@ function enemy_fire(){
         let bullet = new create_entity(10, 30, start_fire.x+25, start_fire.y+30, 'green');
         enemy_bullets.push(bullet);
         draw_enemy_bullets()
+    let shoot = new Audio('shoot.wav')
+    shoot.play()
 
 }
 
@@ -160,7 +184,7 @@ function startCoolDown(){
 }
 
 
-function check_collision(){
+function enemy_check_collision(){
     // loop through all bullets and invaders to check for collision; if triggered, the invader and bullet are spliced out
     for(let b = 0; b < bullets.length; b++){
         for(let i= 0; i <invaders.length;i++) {
@@ -176,6 +200,16 @@ function check_collision(){
     }
 }
 
+function player_check_collision(){
+    for(let i = 0; i < enemy_bullets.length; i++ ){
+        if (shipx <= enemy_bullets[i].x && shipx+60 >= enemy_bullets[i]){
+
+        }
+    }
+}
+function clear_start(){
+    start_ctx.clearRect(0, 0, start_can.width, start_can.height)
+}
 
 function clearCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height)

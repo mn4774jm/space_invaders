@@ -1,12 +1,21 @@
+#start_canvas {
+    border: solid black;
+    position:absolute; left: 50%; width: 400px; margin-left: -200px; z-index: 1;
+    /*background-color: black;*/
+
+}
+
 #canvas {
     border: solid black 5px;
-    position:absolute; left: 50%; width: 400px; margin-left: -200px;
+    position:absolute; left: 50%; width: 400px; margin-left: -200px; z-index: 0;
     background-color: gainsboro;
 }
 
 #title_card {
     text-align: center;
-    color: gainsboro;
+    font-family: 'Permanent Marker', cursive;    color: gainsboro;
+    font-weight: bold;
+    outline-color: black;
 }
 
 body {
