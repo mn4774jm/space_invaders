@@ -10,19 +10,22 @@ let shipx = 225;
 let shipy = 660;
 let bullets = [];
 let enemy_bullets = [];
+let game_speed = 500;
+let enemy_fire_speed = 6000;
 // set interval to move blocks every half second
-setInterval(updateGame, 500);
+setInterval(updateGame, game_speed);
+setInterval(enemy_fire, enemy_fire_speed)
 
 function startGame() {
-    let themeSong = new Audio('02_Rounds%201,%209.mp3')
-        themeSong.play()
+    let themeSong = new Audio('02_Rounds%201,%209.mp3'); // thme song not playing for some reason
+        themeSong.play();
 // create new enemy objects and push to the invaders list
     for (let i = 0; i < 4; i++) {
         default_y = 20;
         let invader = new create_entity(60, 30, default_x, default_y, 'black');
         invaders.push(invader);
 
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 5; i++) {
             invader = new create_entity(60, 30, default_x, default_y, 'black');
             invaders.push(invader);
             default_y += 50
@@ -69,6 +72,7 @@ function updateGame() {
         }
         draw_player();
         draw_bullets();
+        draw_enemy_bullets();
         invaders.forEach(function (element) {
                 element.x += direction;
                 element.update()
@@ -89,7 +93,7 @@ function move_ship(e){
             fire_bullet();
             break;
     }
-    updateGame()
+    // updateGame()
     // - this will increase the speed of the game so the blocks move twice as fast when the player issues a command
     // could be a fun feature to implement at a later date
 }
@@ -110,34 +114,46 @@ function fire_bullet(){
     let bullet = new create_entity(10, 30, shipx+25, shipy-30, 'red');
     bullets.push(bullet);
     draw_bullets();
-    draw_enemy_bullets()
     let shoot = new Audio('shoot.wav')
         shoot.play()
     startCoolDown()}
 }
 
+
+let enemy_cooldown = false;
 function enemy_fire(){
-    let start_fire = invaders[Math.floor(Math.random()*invaders.length)]
+    if(!enemy_cooldown){
+        let start_fire = invaders[Math.floor(Math.random()*invaders.length)]
+        let bullet = new create_entity(10, 30, start_fire.x+25, start_fire.y-30, 'green');
+        enemy_bullets.push(bullet);
+        draw_enemy_bullets()
+
+    }
 }
+
 
 function draw_bullets(){
     bullets.forEach(function(element){
-        element.y -= 5;
+        element.y -= 10;
         element.update()
     })
 }
+
+
 function draw_enemy_bullets(){
     enemy_bullets.forEach(function(element){
-        element.y += 5;
+        element.y += 10;
         element.update()
     })
 }
+
 
 //function for cooldown timer. Timer must finish before another bullet can be fired by the player
 function startCoolDown(){
     cooldown = true;
     setTimeout(function(){ cooldown = false}, RECHARGE_TIME)
 }
+
 
 function check_collision(){
     // loop through all bullets and invaders to check for collision; if triggered, the invader and bullet are spliced out
@@ -148,13 +164,14 @@ function check_collision(){
                 invaders.splice(i,1);
                 bullets.splice(b,1);
                 let explode = new Audio('invaderkilled.wav')
-                explode.play()
+                explode.play();
+                game_speed += 1000;
 
             }
         }
     }
-
 }
+
 
 function clearCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height)
