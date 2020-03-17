@@ -1,44 +1,32 @@
 //create canvas
-let start_can = document.getElementById('start_canvas');
-let start_ctx = start_can.getContext('2d');
-
 let canvas = document.getElementById('canvas');
 let context = canvas.getContext('2d');
+let title_card = document.getElementById('title_card');
 //set-up default arrays and default starting positions
 let invaders =[];
+let bullets = [];
+let enemy_bullets = [];
 let default_x = 20;
 let default_y = 20;
 let direction = -20;
 let shipx = 225;
 let shipy = 660;
-let bullets = [];
-let enemy_bullets = [];
+
 let game_speed = 500;
 let enemy_fire_speed = 6000;
+let game_play = true;
 // set interval to move blocks every half second
 setInterval(updateGame, game_speed);
 setInterval(enemy_fire, enemy_fire_speed)
 
-function ready_to_start(){
 
-// maybe try creating a new canvas that fills most of the screen instructing the user to click to start, use a mouse listener to launch game and start music
-
-    start_ctx.fillStyle = "white";
-    start_ctx.font = 'bold 16px Arial';
-    start_ctx.textAlign = 'center';
-    start_ctx.textBaseline = "middle"
-    start_ctx.fillText("SPACE INVADERS\nclick to start", (canvas.width / 2), -17, (canvas.height / 2) +8)
-
-}
 let music = new Audio('themeSong.mp3');
+music.loop = true;
 function startGame() {
-    let music = new Audio('themeSong.mp3');
-    music.play()
-
     while (invaders.length <= 20) {
         default_x = 20;
         for (let i =0; i< 4; i++){
-            let invader = new create_entity(60, 30, default_x, default_y, 'black');
+            let invader = new create_entity(60, 30, default_x, default_y, 'white');
             invaders.push(invader);
             default_x += 90
         }
@@ -59,6 +47,11 @@ function create_entity(width, height, x, y, color) {
 }
 
 //draw player block at starting location
+//TODO repurpose this block to call create_entity to build players ship
+//TODO create new array to hold player ship
+//TODO reassign key input to update player object
+//TODO update bullets to use objects location
+
 function draw_player(){
     clearCanvas();
     context.fillStyle = 'blue';
@@ -194,7 +187,7 @@ function enemy_check_collision(){
                 bullets.splice(b,1);
                 let explode = new Audio('invaderkilled.wav');
                 explode.play();
-                game_speed += 1000;
+                game_speed -= 1000;
             }
         }
     }
@@ -208,7 +201,8 @@ function player_check_collision(){
     }
 }
 function clear_start(){
-    start_ctx.clearRect(0, 0, start_can.width, start_can.height)
+    title_card.style.display='none';
+
 }
 
 function clearCanvas() {

@@ -1,23 +1,34 @@
 #start_canvas {
     border: solid black;
     position:absolute; left: 50%; width: 400px; margin-left: -200px; z-index: 1;
-    /*background-color: black;*/
+    background-color: black;
 
+}
+
+#intro{
+    font-size: 500%;
+    position:absolute; left: 50%; width: 400px; margin-left: -200px; margin-top: 75px; z-index: 2;
+}
+
+#start_button {
+    font-size: 150%;
+    position:absolute; left: 50%; width: 400px; margin-left: -200px; margin-top: 400px; z-index: 2;
 }
 
 #canvas {
     border: solid black 5px;
     position:absolute; left: 50%; width: 400px; margin-left: -200px; z-index: 0;
-    background-color: gainsboro;
+    background-color: black;
 }
 
 #title_card {
     text-align: center;
-    font-family: 'Permanent Marker', cursive;    color: gainsboro;
+    font-family: 'Permanent Marker', cursive;
+    color: gainsboro;
     font-weight: bold;
     outline-color: black;
 }
 
 body {
-    background-color: darkblue;
+    background-color: black;
 }
