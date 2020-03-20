@@ -2,6 +2,9 @@
 let canvas = document.getElementById('canvas');
 let context = canvas.getContext('2d');
 let title_card = document.getElementById('title_card');
+let score_counter = document.getElementById('player_score')
+let new_score = 0
+score_counter.innerHTML = new_score
 //set-up default arrays and default starting positions
 let invaders =[];
 let bullets = [];
@@ -190,6 +193,8 @@ function enemy_check_collision(){
                 let explode = new Audio('invaderkilled.wav');
                 explode.play();
                 enemy_fire_speed -= 1000;
+                new_score += 100
+                score_counter.innerHTML = new_score
             }
         }
     }
