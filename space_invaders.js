@@ -11,6 +11,7 @@ let default_y = 20;
 let direction = -20;
 let shipx = 225;
 let shipy = 660;
+let player_array = [];
 
 let game_speed = 500;
 let enemy_fire_speed = 6000;
@@ -19,9 +20,10 @@ let game_play = true;
 setInterval(updateGame, game_speed);
 setInterval(enemy_fire, enemy_fire_speed)
 
-
 let music = new Audio('themeSong.mp3');
 music.loop = true;
+
+
 function startGame() {
     while (invaders.length <= 20) {
         default_x = 20;
@@ -32,6 +34,9 @@ function startGame() {
         }
         default_y += 50
     }
+
+    let player = new create_entity(60, 30, shipx, shipy, 'blue');
+    player_array.push(player)
 }
 
 // used to create new invader
@@ -47,16 +52,11 @@ function create_entity(width, height, x, y, color) {
 }
 
 //draw player block at starting location
-//TODO repurpose this block to call create_entity to build players ship
-//TODO create new array to hold player ship
-//TODO reassign key input to update player object
-//TODO update bullets to use objects location
 
 function draw_player(){
     clearCanvas();
     context.fillStyle = 'blue';
-    context.fillRect(shipx, shipy, 60, 30)
-
+    context.fillRect(player_array[0].x, player_array[0].y, 60, 30)
 }
 
 //called every half second to run game. Calls for the player to be redrawn as well as bullets
@@ -64,6 +64,7 @@ function updateGame() {
     // at each interval clear the canvas and add to invader.y; update through create_entity method on line 19
     clearCanvas();
     enemy_check_collision()
+    player_check_collision()
         let check = check_border();
         if( check === true){
             direction *= -1;
@@ -72,6 +73,7 @@ function updateGame() {
             })
         }
         draw_player();
+
         draw_bullets();
         draw_enemy_bullets();
         invaders.forEach(function (element) {
@@ -92,10 +94,10 @@ function move_ship(e){
     }
     switch(e.keyCode) {
         case 37: //move left
-            shipx -= 5;
+            player_array[0].x -= 8;
             break;
         case 39: //move right
-            shipx += 5;
+            player_array[0].x += 8;
             break;
         case 32: //spacebar
             fire_bullet();
@@ -119,7 +121,7 @@ let cooldown = false;
 let RECHARGE_TIME = 2000;
 function fire_bullet(){
     if (!cooldown){
-    let bullet = new create_entity(10, 30, shipx+25, shipy-30, 'red');
+    let bullet = new create_entity(10, 30, player_array[0].x+25, player_array[0].y-30, 'red');
     bullets.push(bullet);
     draw_bullets();
     let shoot = new Audio('shoot.wav')
@@ -187,7 +189,7 @@ function enemy_check_collision(){
                 bullets.splice(b,1);
                 let explode = new Audio('invaderkilled.wav');
                 explode.play();
-                game_speed -= 1000;
+                enemy_fire_speed -= 1000;
             }
         }
     }
@@ -195,11 +197,17 @@ function enemy_check_collision(){
 
 function player_check_collision(){
     for(let i = 0; i < enemy_bullets.length; i++ ){
-        if (shipx <= enemy_bullets[i].x && shipx+60 >= enemy_bullets[i]){
-
+        if(enemy_bullets[i].x >= player_array[0].x && enemy_bullets[i].x <= player_array[0].x+60 &&
+            player_array[0].y >= enemy_bullets[i].y-60 && player_array[0].y <= enemy_bullets[i].y+30){
+            player_array.splice(0,1)
+            let explode = new Audio('explosion.wav');
+            explode.play();
+            music.pause()
+            gameOver()
         }
     }
 }
+
 function clear_start(){
     title_card.style.display='none';
 
@@ -207,4 +215,9 @@ function clear_start(){
 
 function clearCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height)
+}
+
+function gameOver() {
+    canvas.style.display='none'
+
 }
