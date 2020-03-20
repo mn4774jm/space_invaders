@@ -16,8 +16,9 @@ let shipx = 225;
 let shipy = 660;
 let player_array = [];
 
-let game_speed = 500;
+let game_speed = 400;
 let enemy_fire_speed = 6000;
+let enemy_colors = ['green', 'yellow', 'red', 'purple'];
 let game_play = true;
 // set interval to move blocks every half second
 setInterval(updateGame, game_speed);
@@ -31,7 +32,8 @@ function startGame() {
     while (invaders.length <= 20) {
         default_x = 20;
         for (let i =0; i< 4; i++){
-            let invader = new create_entity(60, 30, default_x, default_y, 'white');
+            let color = enemy_colors[Math.floor(Math.random()*enemy_colors.length)]
+            let invader = new create_entity(60, 30, default_x, default_y, color);
             invaders.push(invader);
             default_x += 90
         }
@@ -48,6 +50,7 @@ function create_entity(width, height, x, y, color) {
     this.height = height;
     this.x = x;
     this.y = y;
+    this.color = color
     this.update = function() {
         context.fillStyle = color;
         context.fillRect(this.x, this.y, this.width, this.height);
@@ -188,13 +191,15 @@ function enemy_check_collision(){
         for(let i= 0; i <invaders.length;i++) {
             if(invaders[i].x >= bullets[b].x && invaders[i].x <= bullets[b].x+60 &&
                 invaders[i].y >= bullets[b].y-30 && invaders[i].y <= bullets[b].y){
-                invaders.splice(i,1);
-                bullets.splice(b,1);
                 let explode = new Audio('invaderkilled.wav');
                 explode.play();
                 enemy_fire_speed -= 1000;
-                new_score += 100
+                let points = point_calculator(invaders[i].color)
+                console.log(invaders[i].color)
+                new_score += points
                 score_counter.innerHTML = new_score
+                invaders.splice(i,1);
+                bullets.splice(b,1);
             }
         }
     }
@@ -203,14 +208,27 @@ function enemy_check_collision(){
 function player_check_collision(){
     for(let i = 0; i < enemy_bullets.length; i++ ){
         if(enemy_bullets[i].x >= player_array[0].x && enemy_bullets[i].x <= player_array[0].x+60 &&
-            player_array[0].y >= enemy_bullets[i].y-60 && player_array[0].y <= enemy_bullets[i].y+30){
+            player_array[0].y >= enemy_bullets[i].y && player_array[0].y <= enemy_bullets[i].y+30){
             player_array.splice(0,1)
             let explode = new Audio('explosion.wav');
             explode.play();
-            music.pause()
             gameOver()
         }
     }
+}
+
+function point_calculator(color){
+    let points;
+    if(color === 'green'){
+        points = 50
+    }else if(color === 'yellow'){
+        points = 100
+    }else if(color === 'red'){
+        points = 150
+    }else if(color === 'purple'){
+        points = 200
+    }
+    return points
 }
 
 function clear_start(){
@@ -224,5 +242,5 @@ function clearCanvas() {
 
 function gameOver() {
     canvas.style.display='none'
-
+    music.pause()
 }

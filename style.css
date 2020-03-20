@@ -1,7 +1,8 @@
 #start_canvas {
-    border: solid black;
+    /*border: solid black;*/
     position:absolute; left: 50%; width: 400px; margin-left: -200px; z-index: 1;
-    background-color: black;
+    /*background-color: black;*/
+    opacity: 100%;
 
 }
 
@@ -16,24 +17,41 @@
 }
 
 #canvas {
-    border: solid black 5px;
+    /*border: solid black 5px;*/
     position:absolute; left: 50%; width: 400px; margin-left: -200px; z-index: 0;
-    background-color: black;
+    /*background-color: black;*/
+    opacity: 100%;
 }
 
 #title_card {
     text-align: center;
     font-family: 'Permanent Marker', cursive;
-    color: gainsboro;
+    color: blue;
     font-weight: bold;
     outline-color: black;
 }
-h1 {
+
+#game-instructions {
     font-size: 200%;
-    color: green;
-    text-align: center;
+    color: dodgerblue;
     font-family: 'Permanent Marker', cursive;
 }
+
+#point-structure {
+    font-size: 200%;
+    color: white;
+    font-family: 'Permanent Marker', cursive;
+    text-align: right;
+}
+
+h1 {
+    font-size: 200%;
+    color: dodgerblue;
+    text-align: center;
+    font-family: 'Permanent Marker', cursive;
+    border: solid dodgerblue 5px;
+}
 body {
-    background-color: black;
+    /*background-color: black;*/
+    background-image: url("space4.jpg");
 }
