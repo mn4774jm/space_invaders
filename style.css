@@ -44,6 +44,35 @@
     text-align: right;
 }
 
+#green{
+    text-align-last: right;
+    margin-left: 725px;
+    color: green;
+}
+
+#yellow{
+    text-align-last: right;
+    margin-left: 815px;
+    color: yellow;
+}
+
+#red{
+    text-align-last: right;
+    margin-left: 840px;
+    color: red;
+}
+
+#purple{
+    text-align-last: right;
+    margin-right: 33px;
+    color: purple;
+}
+
+#points{
+    text-align-last: right;
+    margin-left: 980px;
+}
+
 h1 {
     font-size: 200%;
     color: dodgerblue;
