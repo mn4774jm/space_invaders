@@ -1,0 +1,7 @@
+.links{
+    text-decoration: underline
+}
+
+a:active {
+    text-decoration: #811ca1;
+}
