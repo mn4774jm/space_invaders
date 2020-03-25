@@ -1,7 +1,8 @@
+/*absolute and margins used to ensure that each canvas is centered*/
+
 #start_canvas {
     position:absolute; left: 50%; width: 400px; margin-left: -200px;
     opacity: 100%;
-
 }
 
 #intro{
@@ -15,21 +16,17 @@
 }
 
 #canvas {
-    /*border: solid black 5px;*/
     position:absolute; left: 50%; width: 400px; margin-left: -200px;
-    /*background-color: black;*/
     opacity: 100%;
 }
 
-
+/*styles section for text*/
 #title_card {
     text-align: center;
     font-family: 'Permanent Marker', cursive;
     color: blue;
     font-weight: bold;
     outline-color: white;
-    /*text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
-
 }
 
 #game-instructions {
@@ -83,6 +80,8 @@ h1 {
     font-family: 'Permanent Marker', cursive;
     border: solid dodgerblue 5px;
 }
+
+/*position is set so that text will move when screen size is changed*/
 body {
     background-image: url("space4.jpg");
     position: fixed;

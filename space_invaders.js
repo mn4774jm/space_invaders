@@ -14,22 +14,22 @@ let bullets = [];
 let enemy_bullets = [];
 let player_array = [];
 let enemy_colors = ['green', 'yellow', 'red', 'purple'];
-
 let default_x = 20;
 let default_y = 20;
 let direction = -20;
 let shipx = 225;
 let shipy = 660;
-// startGame()
 let game_play = true;
 // set intervals for game speed and enemy fire rates
 let game_speed = 400;
 let enemy_fire_speed = 6000;
-
-
+let e_fire;
 // set up new audio object
 let music = new Audio('themeSong.mp3');
+let end_tune = new Audio('lonely_man2.mp3')
 music.loop = true;
+// call to create player and computer ships
+populate_game()
 
 //event listeners for left, right, spacebar, and enter keys keys
 let counter = 0;
@@ -53,19 +53,19 @@ function move_ship(e) {
             fire_bullet();
             break;
         case 13: //enter key will reload page
+            end_tune.pause()
             location.reload()
             break;
     }
 }
 
-populate_game()
-
+// called when user presses one of the listener keys. Begins the game.
 function start_flow() {
-    setInterval(updateGame, game_speed);
-    setInterval(enemy_fire, enemy_fire_speed)
+        setInterval(updateGame, game_speed);
+        e_fire = setInterval(enemy_fire, enemy_fire_speed)
 }
 
-// startgame() method is used to create enemy and player ships. New entity is called to create a new object for each
+// used to create enemy and player ships. New entity is called to create a new object for each
 // enemy ship colors are randomized from pre-defined array with each color being worth a different point value
 function populate_game() {
     while (invaders.length <= 20) {
@@ -126,8 +126,10 @@ function updateGame() {
     }
 }
 
+// evaluates if player bullets and enemy ships overlap
 function enemy_check_collision(){
-    // loop through all bullets and invaders to check for collision; if triggered, the invader and bullet are spliced out
+    // loop through all bullets and invaders to check for collision; if triggered
+    // the enemy explode sound plays and the enemy fire rate is increased
     for(let b = 0; b < bullets.length; b++){
         for(let i= 0; i <invaders.length;i++) {
             if(invaders[i].x >= bullets[b].x && invaders[i].x <= bullets[b].x+60 &&
@@ -135,10 +137,13 @@ function enemy_check_collision(){
                 let explode = new Audio('invaderkilled.wav');
                 explode.play();
                 enemy_fire_speed -= 1000;
+                // points are calculated by passing the element from the enemy object to the calculator
+                // The returned value is added to the new_score and added to the html in the global scope.
                 let points = point_calculator(invaders[i].color)
                 console.log(invaders[i].color)
                 new_score += points
                 score_counter.innerHTML = new_score
+                // after score is added, the invader and bullet are spliced out
                 invaders.splice(i,1);
                 bullets.splice(b,1);
             }
@@ -146,6 +151,8 @@ function enemy_check_collision(){
     }
 }
 
+// loop through enemy bullets and compares to player location.
+// if true player explode sound triggers and the gameOver method is called
 function player_check_collision(){
     for(let i = 0; i < enemy_bullets.length; i++ ){
         if(enemy_bullets[i].x >= player_array[0].x && enemy_bullets[i].x <= player_array[0].x+60 &&
@@ -158,7 +165,7 @@ function player_check_collision(){
     }
 }
 
-
+// used to make sure that the enemy blocks stay in bounds
 function check_border() {
     for (let i = 0; i < invaders.length; i++) {
         return invaders[i].x <= 0 || invaders[i].x >= 155;
@@ -166,7 +173,7 @@ function check_border() {
 }
 
 //called when spacebar pressed. create cooldown variable and recharge time.
-//if not on cooldown calls to draw bullet and starts recharge timer method
+//if not on cooldown calls to draw bullet and starts recharge timer method.
 let cooldown = false;
 let RECHARGE_TIME = 2000;
 function fire_bullet(){
@@ -189,7 +196,7 @@ function enemy_fire(){
             min_y = element.y
         }
     });
-    // if element y value is equal to min y, store to array
+    // if element y value is equal to min y, store to array. This allows only the bottom blocks to fire
     invaders.forEach(function(element){
         if(element.y === min_y){
             can_fire.push(element)
@@ -205,7 +212,7 @@ function enemy_fire(){
 
 }
 
-
+// moves enemy bullet(s) with each update call
 function draw_enemy_bullets(){
     enemy_bullets.forEach(function(element){
         element.y += 10;
@@ -213,7 +220,7 @@ function draw_enemy_bullets(){
     })
 }
 
-
+// moves player bullet(s) with each update call
 function draw_bullets(){
     bullets.forEach(function(element){
         element.y -= 10;
@@ -228,7 +235,7 @@ function startCoolDown(){
     setTimeout(function(){ cooldown = false}, RECHARGE_TIME)
 }
 
-
+// validates color info from enemy_check_collision() and returns point value dependant on color parameter
 function point_calculator(color){
     let points;
     if(color === 'green'){
@@ -243,21 +250,28 @@ function point_calculator(color){
     return points
 }
 
+// called to set remove title screen canvas.
 function clear_start(){
     title_card.style.display='none';
 
 }
 
+// called to clear canvas. needed to make previous element positions disappear
 function clearCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height)
 }
 
+// game_play becomes false, ending update cycle. canvas is removed from the display. Title card returns with
+// new innerhtml text. interval for enemy_fire is cleared to stop sound effects.
 function gameOver() {
     game_play = false;
+    end_tune.play()
     canvas.style.display='none';
     music.pause();
     document.getElementById('game-instructions').style.display = 'none';
     title_card.style.display='inherit';
     intro_text.innerHTML = 'GAME OVER';
     intro_text2.innerHTML = 'press "Enter" to play again';
+    clearInterval(e_fire)
+
 }
