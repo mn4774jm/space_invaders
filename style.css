@@ -1,34 +1,35 @@
 #start_canvas {
-    /*border: solid black;*/
-    position:absolute; left: 50%; width: 400px; margin-left: -200px; z-index: 1;
-    /*background-color: black;*/
+    position:absolute; left: 50%; width: 400px; margin-left: -200px;
     opacity: 100%;
 
 }
 
 #intro{
     font-size: 500%;
-    position:absolute; left: 50%; width: 400px; margin-left: -200px; margin-top: 75px; z-index: 2;
+    position:absolute; left: 50%; width: 400px; margin-left: -200px; margin-top: 75px;
 }
 
 #start_button {
     font-size: 150%;
-    position:absolute; left: 50%; width: 400px; margin-left: -200px; margin-top: 400px; z-index: 2;
+    position:absolute; left: 50%; width: 400px; margin-left: -200px; margin-top: 400px;
 }
 
 #canvas {
     /*border: solid black 5px;*/
-    position:absolute; left: 50%; width: 400px; margin-left: -200px; z-index: 0;
+    position:absolute; left: 50%; width: 400px; margin-left: -200px;
     /*background-color: black;*/
     opacity: 100%;
 }
+
 
 #title_card {
     text-align: center;
     font-family: 'Permanent Marker', cursive;
     color: blue;
     font-weight: bold;
-    outline-color: black;
+    outline-color: white;
+    /*text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
+
 }
 
 #game-instructions {
@@ -41,36 +42,38 @@
     font-size: 200%;
     color: white;
     font-family: 'Permanent Marker', cursive;
-    text-align: right;
+    float: right;
 }
 
 #green{
     text-align-last: right;
-    margin-left: 725px;
     color: green;
+    float: right;
+
 }
 
 #yellow{
     text-align-last: right;
-    margin-left: 815px;
     color: yellow;
+    float: right;
 }
 
 #red{
     text-align-last: right;
-    margin-left: 840px;
     color: red;
+    float: right;
 }
 
 #purple{
     text-align-last: right;
-    margin-right: 33px;
+    margin-right: 0px;
     color: purple;
 }
 
 #points{
     text-align-last: right;
-    margin-left: 980px;
+    float: right;
+    text-decoration: underline;
 }
 
 h1 {
@@ -81,6 +84,10 @@ h1 {
     border: solid dodgerblue 5px;
 }
 body {
-    /*background-color: black;*/
     background-image: url("space4.jpg");
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }

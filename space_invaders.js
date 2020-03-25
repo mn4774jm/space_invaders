@@ -2,7 +2,9 @@
 let canvas = document.getElementById('canvas');
 let context = canvas.getContext('2d');
 let title_card = document.getElementById('title_card');
-let score_counter = document.getElementById('player_score')
+let score_counter = document.getElementById('player_score');
+let intro_text = document.getElementById('intro');
+let intro_text2 = document.getElementById('start_button');
 let new_score = 0
 score_counter.innerHTML = new_score
 //set-up default arrays and default starting positions
@@ -15,7 +17,6 @@ let direction = -20;
 let shipx = 225;
 let shipy = 660;
 let player_array = [];
-
 let game_speed = 400;
 let enemy_fire_speed = 6000;
 let enemy_colors = ['green', 'yellow', 'red', 'purple'];
@@ -107,6 +108,9 @@ function move_ship(e){
             break;
         case 32: //spacebar
             fire_bullet();
+            break;
+        case 13:
+            location.reload()
             break;
     }
     // updateGame()
@@ -243,4 +247,8 @@ function clearCanvas() {
 function gameOver() {
     canvas.style.display='none'
     music.pause()
+    document.getElementById('game-instructions').style.display = 'none';
+    title_card.style.display='inherit';
+    intro_text.innerHTML = 'GAME OVER'
+    intro_text2.innerHTML = 'press "Enter" to play again'
 }
